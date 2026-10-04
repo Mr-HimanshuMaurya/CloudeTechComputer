@@ -101,3 +101,44 @@ a:focus-visible, button:focus-visible {
   outline: none;
   border-color: var(--color-signal);
 }
+
+/* Horizontal scroll track styles */
+.services-track {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.services-track > * {
+  scroll-snap-align: center;
+}
+
+/* Ensure cursor styles work with custom cursor */
+.cursor-none {
+  cursor: none !important;
+}
+
+/* Hero section pin spacing */
+.pin-spacer {
+  pointer-events: none;
+}
+.pin-spacer > * {
+  pointer-events: auto;
+}
+
+/* Custom cursor styles */
+.cursor-hover:hover,
+a:hover,
+button:hover,
+[role="button"]:hover,
+.service-card:hover,
+.team-card:hover {
+  cursor: none;
+}
+.cursor-hover,
+a,
+button,
+[role="button"],
+.service-card,
+.team-card {
+  cursor: none;
+}

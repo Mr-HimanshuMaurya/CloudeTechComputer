@@ -4,6 +4,8 @@ import { useEffect, lazy, Suspense } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
+import CustomCursor from "./components/CustomCursor";
+import { useLenis } from "./hooks/useLenis";
 
 const About = lazy(() => import("./pages/About"));
 const Services = lazy(() => import("./pages/Services"));
@@ -13,16 +15,23 @@ const Contact = lazy(() => import("./pages/Contact"));
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
+    const lenis = window.__LENIS__;
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
   }, [pathname]);
   return null;
 }
 
 export default function App() {
   const location = useLocation();
+  useLenis();
 
   return (
     <div className="grain-bg min-h-screen flex flex-col">
+      <CustomCursor />
       <Navbar />
       <ScrollToTop />
       <AnimatePresence mode="wait">
