@@ -16,7 +16,7 @@ export default function Home() {
     const words = headlineRef.current?.querySelectorAll(".word");
     if (!words) return;
     const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
     if (prefersReduced) {
       gsap.set(words, { opacity: 1, y: 0 });
@@ -25,7 +25,14 @@ export default function Home() {
     gsap.fromTo(
       words,
       { opacity: 0, y: 22 },
-      { opacity: 1, y: 0, duration: 0.7, stagger: 0.06, ease: "power3.out", delay: 0.15 }
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        stagger: 0.06,
+        ease: "power3.out",
+        delay: 0.15,
+      },
     );
   }, []);
 
@@ -40,14 +47,6 @@ export default function Home() {
 
         <div className="container-px relative w-full grid lg:grid-cols-12 gap-8 items-end">
           <div className="lg:col-span-9">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-signal opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-signal" />
-              </span>
-              <span className="mono-label">Systems operational — Managed IT since {company.founded}</span>
-            </div>
-
             <h1
               ref={headlineRef}
               className="font-display font-semibold text-[2.5rem] leading-[1.08] sm:text-6xl md:text-7xl tracking-tight text-text max-w-4xl"
@@ -69,7 +68,10 @@ export default function Home() {
                 className="group inline-flex items-center gap-2 px-6 py-3.5 rounded-md bg-signal text-base font-semibold text-sm hover:bg-white transition-colors"
               >
                 Talk to our team
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowRight
+                  size={16}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
               </NavLink>
               <NavLink
                 to="/services"
@@ -90,7 +92,9 @@ export default function Home() {
               <p className="font-mono text-2xl md:text-3xl font-semibold text-signal glow-text">
                 {s.value}
               </p>
-              <p className="text-xs md:text-sm text-muted-2 mt-1.5">{s.label}</p>
+              <p className="text-xs md:text-sm text-muted-2 mt-1.5">
+                {s.label}
+              </p>
             </div>
           ))}
         </div>
@@ -127,8 +131,14 @@ export default function Home() {
             ].map((f, i) => (
               <Reveal key={f.title} delay={i * 0.08}>
                 <div className="card-border rounded-xl p-6 h-full">
-                  <f.icon size={20} className="text-signal mb-4" strokeWidth={1.75} />
-                  <h3 className="font-display font-semibold text-text mb-2">{f.title}</h3>
+                  <f.icon
+                    size={20}
+                    className="text-signal mb-4"
+                    strokeWidth={1.75}
+                  />
+                  <h3 className="font-display font-semibold text-text mb-2">
+                    {f.title}
+                  </h3>
                   <p className="text-sm text-muted leading-relaxed">{f.body}</p>
                 </div>
               </Reveal>
@@ -203,7 +213,8 @@ export default function Home() {
                 Ready to stop managing servers yourself?
               </h2>
               <p className="text-muted mt-5 max-w-md mx-auto">
-                Tell us what you're running today — we'll tell you exactly what it needs.
+                Tell us what you're running today — we'll tell you exactly what
+                it needs.
               </p>
               <NavLink
                 to="/contact"
