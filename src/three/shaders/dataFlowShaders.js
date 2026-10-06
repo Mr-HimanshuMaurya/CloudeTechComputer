@@ -10,7 +10,8 @@ export const vertexShader = /* glsl */ `
   }
 `;
 
-// Fragment Shader - Raymarched Data Flow Field with DRAMATIC scroll reactivity
+// Fragment Shader - Premium Engineered Data Flow Visualization
+// Clean, technical, vibrant - designed for IT infrastructure brand
 export const fragmentShader = /* glsl */ `
   #define PI 3.14159265359
   #define TAU 6.28318530718
@@ -25,12 +26,16 @@ export const fragmentShader = /* glsl */ `
   varying vec2 vUv;
   varying vec3 vPosition;
   
-  // Brand colors
-  const vec3 BASE_COLOR = vec3(0.043, 0.059, 0.078);       // #0B0F14
-  const vec3 SIGNAL_CYAN = vec3(0.0, 0.851, 0.753);         // #00D9C0
-  const vec3 VIOLET = vec3(0.486, 0.435, 1.0);              // #7C6FFF
-  const vec3 VIOLET_DIM = vec3(0.25, 0.2, 0.7);
-  const vec3 AMBER = vec3(1.0, 0.706, 0.329);               // #FFB454
+  // Brand colors - BRIGHT & VIBRANT
+  const vec3 BASE_COLOR = vec3(0.035, 0.055, 0.085);       // Deep graphite-navy #090E16
+  const vec3 BASE_DEEP = vec3(0.02, 0.035, 0.06);          // Even deeper for contrast
+  const vec3 SIGNAL_CYAN = vec3(0.0, 0.92, 0.82);          // Bright signal cyan #00EBCC
+  const vec3 SIGNAL_CYAN_SOFT = vec3(0.0, 0.65, 0.58);     // Softer variant
+  const vec3 VIOLET = vec3(0.55, 0.5, 1.0);                // Bright violet #8C80FF
+  const vec3 VIOLET_BRIGHT = vec3(0.7, 0.65, 1.0);         // Even brighter
+  const vec3 AMBER = vec3(1.0, 0.78, 0.35);                // Warm amber #FFC759
+  const vec3 WHITE_HOT = vec3(1.0, 0.98, 0.95);            // Near white for highlights
+  const vec3 GRID_LINE = vec3(0.05, 0.15, 0.2);            // Subtle grid lines
   
   // Hash functions
   float hash(float n) { return fract(sin(n) * 43758.5453123); }
@@ -59,62 +64,69 @@ export const fragmentShader = /* glsl */ `
     return value;
   }
   
-  // Domain warping - AMPLITUDE INCREASES DRAMATICALLY WITH SCROLL
+  // Domain warping - scroll-controlled intensity
   vec2 warp(vec2 p, float t, float scrollProgress) {
-    // Base warp amount: 0.3 at top, up to 1.2 at bottom (4x increase)
-    float warpAmount = mix(0.3, 1.2, scrollProgress * scrollProgress); // quadratic for more drama
-    vec2 q = vec2(fbm(p + vec2(t * 0.05, t * 0.03), 4),
-                  fbm(p + vec2(t * 0.07, t * 0.04), 4));
+    float warpAmount = mix(0.15, 0.6, smoothstep(0.0, 1.0, scrollProgress * 1.5));
+    vec2 q = vec2(fbm(p + vec2(t * 0.04, t * 0.025), 4),
+                  fbm(p + vec2(t * 0.06, t * 0.035), 4));
     return p + warpAmount * q;
   }
   
-  // Circuit trace SDF - creates sharp, technical lines
+  // Clean technical grid pattern
+  float gridPattern(vec2 p, float thickness) {
+    vec2 grid = abs(fract(p - 0.5) - 0.5);
+    float lines = step(grid.x, thickness) + step(grid.y, thickness);
+    return min(lines, 1.0);
+  }
+  
+  // Circuit trace - sharp technical lines
   float circuitTrace(vec2 p, float t, float seed, float scrollProgress) {
-    // Scale increases with scroll - more detail visible deeper
-    float traceScale = mix(6.0, 14.0, scrollProgress);
+    float traceScale = mix(4.0, 10.0, scrollProgress);
     vec2 warped = warp(p * traceScale + seed * 100.0, t, scrollProgress);
+    
+    // Main ridges
     float n = fbm(warped, 5);
-    
-    // Create sharp ridge lines (circuit traces)
     float ridges = 1.0 - abs(n - 0.5) * 2.0;
-    ridges = smoothstep(0.7, 1.0, ridges);
+    ridges = smoothstep(0.75, 1.0, ridges);
     
-    // Add perpendicular cross-traces - MORE at higher scroll
-    float crossTrace = fbm(warped * 1.5 + vec2(t * 0.1, -t * 0.08) + seed * 200.0, 3);
+    // Cross traces
+    float crossTrace = fbm(warped * 1.8 + vec2(t * 0.08, -t * 0.06) + seed * 200.0, 3);
     crossTrace = 1.0 - abs(crossTrace - 0.5) * 2.0;
-    crossTrace = smoothstep(0.8, 1.0, crossTrace);
+    crossTrace = smoothstep(0.82, 1.0, crossTrace);
     
-    // Trace thickness increases with scroll
-    float traceWeight = mix(0.6, 1.2, scrollProgress);
+    float traceWeight = mix(0.7, 1.3, scrollProgress);
     return max(ridges, crossTrace * traceWeight);
   }
   
-  // Data packet pulse - MORE packets at higher scroll
+  // Data packets - clean moving dots
   float dataPacket(vec2 p, float t, float traceSeed, float packetSeed, float scrollProgress) {
-    float traceScale = mix(6.0, 14.0, scrollProgress);
+    float traceScale = mix(4.0, 10.0, scrollProgress);
     vec2 warped = warp(p * traceScale + traceSeed * 100.0, t, scrollProgress);
     float trace = circuitTrace(p, t, traceSeed, scrollProgress);
     
     if (trace < 0.5) return 0.0;
     
-    // Create moving packets along the trace - SPEED increases with scroll
-    float packetSpeed = mix(0.3, 0.8, scrollProgress);
+    float packetSpeed = mix(0.25, 0.6, scrollProgress);
     float packetPos = fract(t * packetSpeed + packetSeed * 0.7);
     float dist = abs(warped.y - packetPos);
-    float packet = smoothstep(0.02, 0.0, dist) * 0.8;
+    float packet = smoothstep(0.015, 0.0, dist) * 0.9;
     
-    // Packet intensity increases with scroll
-    return packet * mix(0.6, 1.5, scrollProgress);
+    return packet * mix(0.8, 1.8, scrollProgress);
   }
   
-  // Glow/bloom contribution
+  // Glow function
   float glow(float d, float intensity) {
-    return intensity * exp(-d * 12.0);
+    return intensity * exp(-d * 15.0);
   }
   
-  // 2D cross product (returns scalar)
   float cross2d(vec2 a, vec2 b) {
     return a.x * b.y - a.y * b.x;
+  }
+  
+  // Rounded rectangle SDF for UI elements
+  float roundedRect(vec2 p, vec2 size, float radius) {
+    vec2 d = abs(p) - size + vec2(radius);
+    return min(max(d.x, d.y), 0.0) + length(max(d, 0.0)) - radius;
   }
   
   void main() {
@@ -123,108 +135,121 @@ export const fragmentShader = /* glsl */ `
     vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
     uv = (uv - 0.5) * aspect + 0.5;
     
-    // DRAMATIC SCROLL-DRIVEN TRANSFORMS
-    float scrollDolly = uScrollProgress * 3.0; // Increased from 2.5
-    float scrollPanX = sin(uScrollProgress * PI * 2.0) * 0.25; // Increased pan
-    float scrollPanY = cos(uScrollProgress * PI * 1.5) * 0.2;  // Increased pan
+    // Scroll-driven transforms
+    float scrollDolly = uScrollProgress * 3.5;
+    float scrollPanX = sin(uScrollProgress * PI * 1.5) * 0.18;
+    float scrollPanY = cos(uScrollProgress * PI * 1.2) * 0.12;
     
-    // Mouse influence - STRONGER at higher scroll
-    float mouseInfluenceStrength = mix(0.2, 0.6, uScrollProgress);
-    vec2 mouseInfluence = (uMouse - 0.5) * mouseInfluenceStrength;
+    // Mouse influence - stronger at bottom
+    float mouseStrength = mix(0.15, 0.5, uScrollProgress);
+    vec2 mouseInfluence = (uMouse - 0.5) * mouseStrength;
     
     // Time with scroll offset
-    float t = uTime * 0.6 + scrollDolly * 0.5;
+    float t = uTime * 0.5 + scrollDolly * 0.4;
     
-    // Base background - darkens slightly as we scroll deeper
-    vec3 color = BASE_COLOR * mix(1.0, 0.85, uScrollProgress);
+    // === BASE BACKGROUND - Clean gradient ===
+    vec3 color = mix(BASE_COLOR, BASE_DEEP, uScrollProgress * 0.5);
     
-    // Subtle vignette - tightens with scroll
-    float vignette = 1.0 - length(uv - 0.5) * mix(1.2, 1.8, uScrollProgress);
-    color *= vignette * 0.85 + 0.15;
+    // Subtle radial gradient vignette
+    float vignette = 1.0 - smoothstep(0.4, 1.2, length(uv - center) * mix(1.0, 1.4, uScrollProgress));
+    color = mix(color, BASE_DEEP, (1.0 - vignette) * 0.6);
     
-    // Multiple circuit layers with different seeds and speeds
-    float layerCount = uPerformanceLevel >= 2.0 ? 6.0 : (uPerformanceLevel >= 1.0 ? 4.0 : 2.0);
+    // === SUBTLE GRID BACKGROUND (technical feel) ===
+    float gridScale = mix(8.0, 16.0, uScrollProgress);
+    vec2 gridUv = (uv - 0.5) * gridScale + vec2(scrollPanX, scrollPanY) * 20.0;
+    float grid = gridPattern(gridUv, 0.003);
+    color += GRID_LINE * grid * mix(0.15, 0.4, uScrollProgress);
     
-    for (int i = 0; i < 6; i++) {
+    // === CIRCUIT TRACE LAYERS ===
+    float layerCount = uPerformanceLevel >= 2.0 ? 5.0 : (uPerformanceLevel >= 1.0 ? 3.0 : 2.0);
+    
+    for (int i = 0; i < 5; i++) {
       if (float(i) >= layerCount) break;
       
-      float seed = float(i) * 1.7 + 0.3;
-      float layerSpeed = 0.15 + float(i) * 0.08;
-      // Layer scale increases DRAMATICALLY with scroll
-      float layerScale = mix(1.0 + float(i) * 0.3, 3.0 + float(i) * 1.0, uScrollProgress);
-      // Layer alpha increases with scroll - more visible
-      float layerAlpha = mix(0.1 + float(i) * 0.06, 0.35 + float(i) * 0.15, uScrollProgress);
+      float seed = float(i) * 1.9 + 0.4;
+      float layerSpeed = 0.12 + float(i) * 0.06;
+      float layerScale = mix(1.0 + float(i) * 0.25, 2.5 + float(i) * 0.6, uScrollProgress);
+      float layerAlpha = mix(0.12 + float(i) * 0.05, 0.3 + float(i) * 0.12, uScrollProgress);
       
       vec2 layerUv = (uv - 0.5) * layerScale + 0.5;
-      layerUv += vec2(scrollPanX, scrollPanY) * float(i + 1) * 0.8;
-      layerUv += mouseInfluence * (0.3 + float(i) * 0.15);
+      layerUv += vec2(scrollPanX, scrollPanY) * float(i + 1) * 0.6;
+      layerUv += mouseInfluence * (0.25 + float(i) * 0.1);
       
-      // Main circuit trace - now scroll-aware
       float trace = circuitTrace(layerUv, t * layerSpeed, seed, uScrollProgress);
       
       if (trace > 0.0) {
-        float layerProgress = float(i) / 5.0;
-        vec3 traceColor = mix(SIGNAL_CYAN, VIOLET, layerProgress * 0.7 + 0.15);
+        float layerProgress = float(i) / 4.0;
+        // Color shifts from cyan to violet based on layer
+        vec3 traceColor = mix(SIGNAL_CYAN, VIOLET_BRIGHT, layerProgress * 0.8 + 0.1);
         
-        // Core trace - BRIGHTER at higher scroll
-        float traceIntensity = mix(2.0, 5.0, uScrollProgress);
+        // Core trace - BRIGHT
+        float traceIntensity = mix(3.0, 7.0, uScrollProgress);
         color += traceColor * trace * layerAlpha * traceIntensity;
         
-        // Glow around trace - MUCH stronger at higher scroll
-        float glowIntensity = mix(0.5, 2.0, uScrollProgress);
+        // Glow - strong and clean
+        float glowIntensity = mix(1.0, 3.5, uScrollProgress);
         color += traceColor * glow(1.0 - trace, layerAlpha * glowIntensity);
         
-        // Data packets - MORE and BRIGHTER at higher scroll
+        // Data packets - crisp and visible
         int packetCount = uPerformanceLevel >= 2.0 ? 4 : (uPerformanceLevel >= 1.0 ? 3 : 2);
         for (int p = 0; p < 4; p++) {
           if (p >= packetCount) break;
-          float packetSeed = seed + float(p) * 0.33;
+          float packetSeed = seed + float(p) * 0.3;
           float packet = dataPacket(layerUv, t * layerSpeed, seed, packetSeed, uScrollProgress);
           if (packet > 0.0) {
-            vec3 packetColor = mix(AMBER, SIGNAL_CYAN, float(p) * 0.3);
-            color += packetColor * packet * 2.5;
-            color += packetColor * glow(1.0 - packet, packet * 1.0);
+            vec3 packetColor = mix(AMBER, WHITE_HOT, float(p) * 0.25);
+            color += packetColor * packet * 4.0;
+            color += packetColor * glow(1.0 - packet, packet * 2.0);
           }
         }
       }
     }
     
-    // Central "core" node - GROWS and PULSES dramatically with scroll
+    // === CENTRAL CORE NODE - The "Server" ===
     float coreDist = length(uv - vec2(0.5 + scrollPanX, 0.5 + scrollPanY));
-    float corePulse = 0.5 + 0.5 * sin(uTime * 1.8 + scrollDolly * 3.0);
-    // Core radius expands from 0.15 to 0.35
-    float coreRadius = mix(0.15, 0.35, uScrollProgress);
-    float core = smoothstep(coreRadius, 0.0, coreDist) * corePulse * mix(0.4, 1.0, uScrollProgress);
-    color += SIGNAL_CYAN * core * mix(1.0, 2.5, uScrollProgress);
-    color += VIOLET * core * mix(0.5, 1.5, uScrollProgress);
-    color += glow(coreDist, corePulse * mix(0.3, 1.2, uScrollProgress));
+    float corePulse = 0.4 + 0.6 * sin(uTime * 2.0 + scrollDolly * 2.5);
+    float coreRadius = mix(0.12, 0.28, uScrollProgress);
+    float core = smoothstep(coreRadius, 0.0, coreDist) * corePulse * mix(0.5, 1.2, uScrollProgress);
+    color += SIGNAL_CYAN * core * mix(1.5, 3.5, uScrollProgress);
+    color += VIOLET_BRIGHT * core * mix(0.8, 2.0, uScrollProgress);
+    color += WHITE_HOT * core * mix(0.3, 1.0, uScrollProgress); // Hot center
+    color += glow(coreDist, corePulse * mix(0.5, 2.0, uScrollProgress));
     
-    // Secondary nodes (satellite servers) - ORBIT FASTER and FURTHER at higher scroll
+    // Core ring - pulsing outline
+    float ringDist = abs(coreDist - coreRadius * 1.15);
+    float ring = smoothstep(0.012, 0.0, ringDist) * (0.5 + 0.5 * sin(uTime * 3.0 + scrollDolly * 4.0));
+    color += SIGNAL_CYAN * ring * mix(0.4, 1.2, uScrollProgress);
+    
+    // === ORBITING NODES - Satellite servers ===
     int nodeCount = uPerformanceLevel >= 2.0 ? 6 : (uPerformanceLevel >= 1.0 ? 4 : 3);
     for (int i = 0; i < 6; i++) {
       if (i >= nodeCount) break;
-      float angle = float(i) * TAU / float(nodeCount) + uTime * mix(0.05, 0.25, uScrollProgress);
-      // Orbit radius expands with scroll
-      float radius = mix(0.35, 0.55, uScrollProgress) + 0.15 * sin(uTime * 0.4 + float(i));
-      vec2 nodePos = vec2(0.5 + cos(angle) * radius, 0.5 + sin(angle) * radius * 0.7);
+      float angle = float(i) * TAU / float(nodeCount) + uTime * mix(0.04, 0.18, uScrollProgress);
+      float radius = mix(0.32, 0.48, uScrollProgress) + 0.08 * sin(uTime * 0.5 + float(i));
+      vec2 nodePos = vec2(0.5 + cos(angle) * radius, 0.5 + sin(angle) * radius * 0.75);
       nodePos += vec2(scrollPanX, scrollPanY);
       
       float nodeDist = length(uv - nodePos);
-      // Node size increases with scroll
-      float nodeSize = mix(0.035, 0.07, uScrollProgress);
+      float nodeSize = mix(0.028, 0.055, uScrollProgress);
       float node = smoothstep(nodeSize, 0.0, nodeDist);
-      float nodePulse = 0.6 + 0.4 * sin(uTime * 2.2 + float(i) * 2.0);
+      float nodePulse = 0.5 + 0.5 * sin(uTime * 2.5 + float(i) * 2.1);
       
-      color += mix(SIGNAL_CYAN, VIOLET, float(i) * 0.2) * node * nodePulse * mix(0.4, 1.2, uScrollProgress);
+      vec3 nodeColor = mix(SIGNAL_CYAN, VIOLET, float(i) * 0.18);
+      color += nodeColor * node * nodePulse * mix(0.6, 1.5, uScrollProgress);
+      color += WHITE_HOT * node * nodePulse * 0.4; // Bright center
+      
+      // Node ring
+      float nodeRing = smoothstep(nodeSize * 1.4, nodeSize * 1.35, nodeDist) * 0.6;
+      color += nodeColor * nodeRing * 0.5;
     }
     
-    // Connection lines between core and nodes - THICKER and BRIGHTER at higher scroll
+    // === CONNECTION LINES - Clean technical lines ===
     if (uPerformanceLevel >= 1.0) {
       for (int i = 0; i < 6; i++) {
         if (i >= nodeCount) break;
-        float angle = float(i) * TAU / float(nodeCount) + uTime * mix(0.05, 0.25, uScrollProgress);
-        float radius = mix(0.35, 0.55, uScrollProgress) + 0.15 * sin(uTime * 0.4 + float(i));
-        vec2 nodePos = vec2(0.5 + cos(angle) * radius, 0.5 + sin(angle) * radius * 0.7);
+        float angle = float(i) * TAU / float(nodeCount) + uTime * mix(0.04, 0.18, uScrollProgress);
+        float radius = mix(0.32, 0.48, uScrollProgress) + 0.08 * sin(uTime * 0.5 + float(i));
+        vec2 nodePos = vec2(0.5 + cos(angle) * radius, 0.5 + sin(angle) * radius * 0.75);
         nodePos += vec2(scrollPanX, scrollPanY);
         
         vec2 toCore = vec2(0.5 + scrollPanX, 0.5 + scrollPanY) - nodePos;
@@ -232,38 +257,50 @@ export const fragmentShader = /* glsl */ `
         float linePos = dot(uv - nodePos, toCore) / dot(toCore, toCore);
         
         if (linePos > 0.0 && linePos < 1.0) {
-          // Line thickness increases with scroll
-          float lineThickness = mix(0.006, 0.018, uScrollProgress);
-          float lineIntensity = mix(0.1, 0.5, uScrollProgress);
-          float line = smoothstep(lineThickness, 0.0, lineDist) * lineIntensity;
-          color += SIGNAL_CYAN * line * (0.4 + 0.4 * sin(uTime * 3.0 + float(i)));
+          float lineThickness = mix(0.004, 0.012, uScrollProgress);
+          float lineIntensity = mix(0.15, 0.5, uScrollProgress);
+          // Dashed line effect
+          float dash = fract(linePos * 12.0 + uTime * 0.5);
+          float dashMask = step(0.4, dash);
+          float line = smoothstep(lineThickness, 0.0, lineDist) * lineIntensity * dashMask;
+          color += SIGNAL_CYAN * line * 0.8;
+          color += VIOLET * line * 0.3;
         }
       }
     }
     
-    // Scanline / CRT texture - more visible at higher scroll
-    float scanlines = sin(uv.y * uResolution.y * 0.5 + uTime * 10.0) * mix(0.01, 0.04, uScrollProgress);
-    color += vec3(scanlines) * 0.15;
+    // === MOUSE-REACTIVE GLOW POINT ===
+    float mouseDist = length(uv - uMouse);
+    float mouseGlow = glow(mouseDist, mix(0.15, 0.5, uScrollProgress));
+    color += SIGNAL_CYAN * mouseGlow * 0.6;
+    color += VIOLET * mouseGlow * 0.3;
     
-    // Film grain - increases with scroll
-    float grain = (hash(gl_FragCoord.xy + uTime * 100.0) - 0.5) * mix(0.01, 0.03, uScrollProgress);
+    // === SCANLINES - Subtle CRT texture ===
+    float scanlines = sin(uv.y * uResolution.y * 0.5 + uTime * 8.0) * mix(0.008, 0.025, uScrollProgress);
+    color += vec3(scanlines) * 0.08;
+    
+    // === FILM GRAIN - Clean, not noisy ===
+    float grain = (hash(gl_FragCoord.xy + uTime * 100.0) - 0.5) * mix(0.005, 0.015, uScrollProgress);
     color += vec3(grain);
     
-    // Color grading - pushes toward cyan/violet more aggressively at higher scroll
-    float colorGrade = mix(1.0, 1.3, uScrollProgress);
-    color *= vec3(1.0, colorGrade, colorGrade * 1.1);
+    // === COLOR GRADING - Push brand colors ===
+    float grade = mix(1.0, 1.25, uScrollProgress);
+    color *= vec3(0.98, grade, grade * 1.05);
+    
+    // Lift shadows slightly for depth
+    color = max(color, BASE_DEEP * 0.3);
     
     // Gamma correction
     color = pow(color, vec3(1.0 / 2.2));
     
-    // Clamp
+    // Final clamp
     color = clamp(color, 0.0, 1.0);
     
     gl_FragColor = vec4(color, 1.0);
   }
 `;
 
-// Post-processing vertex shader (fullscreen)
+// Post-processing vertex shader
 export const postVertexShader = /* glsl */ `
   varying vec2 vUv;
   void main() {
@@ -272,8 +309,7 @@ export const postVertexShader = /* glsl */ `
   }
 `;
 
-// Post-processing fragment shader - Bloom + Chromatic Aberration + Vignette
-// DRAMATIC scroll-based chromatic aberration and bloom
+// Post-processing fragment - Bloom + Chromatic Aberration + Vignette
 export const postFragmentShader = /* glsl */ `
   uniform sampler2D tDiffuse;
   uniform float uTime;
@@ -292,27 +328,29 @@ export const postFragmentShader = /* glsl */ `
     vec4 color = texture(tDiffuse, uv);
     vec3 col = color.rgb;
     
-    // Bloom - STRONGER at higher scroll
-    vec3 bright = max(col - vec3(0.7), 0.0);
-    float bloomAmount = mix(0.3, 1.0, uScrollProgress);
+    // === BLOOM - Bright areas bleed beautifully ===
+    vec3 bright = max(col - vec3(0.65), 0.0);
+    float bloomAmount = mix(0.4, 1.2, uScrollProgress);
     float bloomStrength = length(bright) * bloomAmount;
     
     vec2 pixelSize = 1.0 / uResolution;
     vec3 bloom = vec3(0.0);
-    for (int x = -3; x <= 3; x++) {
-      for (int y = -3; y <= 3; y++) {
-        vec2 offset = vec2(float(x), float(y)) * pixelSize * 4.0;
+    // Wider kernel for smoother bloom
+    for (int x = -4; x <= 4; x++) {
+      for (int y = -4; y <= 4; y++) {
+        vec2 offset = vec2(float(x), float(y)) * pixelSize * 5.0;
         vec4 texSample = texture(tDiffuse, uv + offset);
-        vec3 sampleBright = max(texSample.rgb - vec3(0.7), 0.0);
-        bloom += sampleBright * exp(-float(x*x + y*y) * 0.25);
+        vec3 sampleBright = max(texSample.rgb - vec3(0.65), 0.0);
+        float weight = exp(-float(x*x + y*y) * 0.18);
+        bloom += sampleBright * weight;
       }
     }
-    bloom /= 49.0;
-    col += bloom * bloomStrength * 2.0;
+    bloom /= 81.0;
+    col += bloom * bloomStrength * 2.5;
     
-    // DRAMATIC Chromatic aberration - 0 to 5 pixels at edges
+    // === CHROMATIC ABERRATION - Dramatic at edges ===
     vec2 center = vec2(0.5);
-    float caAmount = mix(0.0005, 0.006, uScrollProgress * uScrollProgress) + length(uv - center) * 0.004;
+    float caAmount = mix(0.0008, 0.008, uScrollProgress * uScrollProgress) + length(uv - center) * 0.005;
     vec2 caOffset = (uv - center) * caAmount;
     
     float r = texture(tDiffuse, uv + caOffset).r;
@@ -320,13 +358,16 @@ export const postFragmentShader = /* glsl */ `
     float b = texture(tDiffuse, uv - caOffset).b;
     col = vec3(r, g, b);
     
-    // Vignette - tighter at higher scroll
-    float vignette = 1.0 - pow(length(uv - center) * mix(1.2, 1.8, uScrollProgress), 2.0);
+    // === VIGNETTE - Cinematic ===
+    float vignette = 1.0 - pow(length(uv - center) * mix(1.1, 1.6, uScrollProgress), 2.2);
     col *= vignette;
     
-    // Color grading - more aggressive
-    col = saturate(col, mix(1.1, 1.4, uScrollProgress));
-    col *= vec3(1.0, 1.05, 1.1);
+    // === COLOR GRADING - Brand palette push ===
+    col = saturate(col, mix(1.15, 1.5, uScrollProgress));
+    col *= vec3(0.98, 1.08, 1.12);
+    
+    // Lift midtones for richness
+    col = pow(col, vec3(0.92));
     
     // Final gamma
     col = pow(col, vec3(1.0 / 2.2));

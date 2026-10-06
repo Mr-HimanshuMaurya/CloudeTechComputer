@@ -14,7 +14,7 @@ export default function HeroScene({ className = "" }) {
   const [prefersReduced, setPrefersReduced] = useState(false);
   const [performanceLevel, setPerformanceLevel] = useState(2);
   const [internalProgress, setInternalProgress] = useState(0);
-  const [isMounted, setIsMounted] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   // Refs for fast-changing values
   const scrollProgressRef = useRef(0);
@@ -23,7 +23,6 @@ export default function HeroScene({ className = "" }) {
   const targetMouseRef = useRef({ x: 0.5, y: 0.5 });
 
   useEffect(() => {
-    console.log('[HeroScene] Component mounted, prefersReduced:', prefersReduced);
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     setPrefersReduced(mediaQuery.matches);
     const handler = (e) => setPrefersReduced(e.matches);
@@ -52,18 +51,14 @@ export default function HeroScene({ className = "" }) {
       setPerformanceLevel(2);
       performanceLevelRef.current = 2;
     }
-    console.log('[HeroScene] Performance level:', performanceLevelRef.current, 'Renderer:', renderer);
   }, []);
 
-  // Create ScrollTrigger to track hero scroll progress
+  // ScrollTrigger for hero progress
   useEffect(() => {
     if (prefersReduced) return;
     
     const heroSection = document.querySelector('section[style*="200vh"]') || mountRef.current?.closest('section');
-    if (!heroSection) {
-      console.warn('[HeroScene] Hero section not found for ScrollTrigger');
-      return;
-    }
+    if (!heroSection) return;
 
     const st = ScrollTrigger.create({
       trigger: heroSection,
@@ -80,7 +75,7 @@ export default function HeroScene({ className = "" }) {
     return () => st.kill();
   }, [prefersReduced]);
 
-  // Mouse tracking - lerp for smooth movement
+  // Mouse tracking with smooth lerp
   useEffect(() => {
     const handleMouseMove = (e) => {
       targetMouseRef.current.x = e.clientX / window.innerWidth;
@@ -90,30 +85,21 @@ export default function HeroScene({ className = "" }) {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Main Three.js effect - runs ONCE on mount
+  // Main Three.js effect
   useEffect(() => {
     const mount = mountRef.current;
-    if (!mount || prefersReduced) {
-      console.log('[HeroScene] Skipping Three.js init - prefersReduced:', prefersReduced, 'mount:', !!mount);
-      return;
-    }
-
-    console.log('[HeroScene] Initializing Three.js scene...');
+    if (!mount || prefersReduced) return;
 
     const width = mount.clientWidth;
     const height = mount.clientHeight;
-    console.log('[HeroScene] Mount dimensions:', width, 'x', height);
 
-    if (width === 0 || height === 0) {
-      console.error('[HeroScene] Mount has zero dimensions!');
-      return;
-    }
+    if (width === 0 || height === 0) return;
 
     const scene = new THREE.Scene();
     
-    // Use perspective camera for 3D depth and dolly effect
-    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
-    camera.position.set(0, 0, 8);
+    // Perspective camera for 3D depth
+    const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 100);
+    camera.position.set(0, 0, 10);
 
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
@@ -123,9 +109,10 @@ export default function HeroScene({ className = "" }) {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(width, height);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.domElement.style.display = "block"; // Ensure canvas is visible
+    renderer.domElement.style.display = "block";
+    renderer.domElement.style.width = "100%";
+    renderer.domElement.style.height = "100%";
     mount.appendChild(renderer.domElement);
-    console.log('[HeroScene] Canvas appended to DOM:', renderer.domElement);
 
     // Post-processing composer
     const renderTarget = new THREE.WebGLRenderTarget(width, height, {
@@ -184,28 +171,24 @@ export default function HeroScene({ className = "" }) {
       const currentScrollProgress = scrollProgressRef.current;
       const currentPerformanceLevel = performanceLevelRef.current;
 
-      // Smooth lerp mouse position
-      mouseRef.current.x += (targetMouseRef.current.x - mouseRef.current.x) * 0.08;
-      mouseRef.current.y += (targetMouseRef.current.y - mouseRef.current.y) * 0.08;
+      // Smooth mouse lerp
+      mouseRef.current.x += (targetMouseRef.current.x - mouseRef.current.x) * 0.06;
+      mouseRef.current.y += (targetMouseRef.current.y - mouseRef.current.y) * 0.06;
 
-      // DRAMATIC SCROLL REACTIVITY
-      // Camera dolly: move from z=12 to z=3 (9 units of movement)
-      const cameraZ = THREE.MathUtils.lerp(12, 3, currentScrollProgress);
+      // DRAMATIC SCROLL-DRIVEN CAMERA
+      const cameraZ = THREE.MathUtils.lerp(14, 4, currentScrollProgress);
       camera.position.z = cameraZ;
       
-      // Camera rotation: rotate 180 degrees around Y axis
-      const cameraRotY = currentScrollProgress * Math.PI;
+      const cameraRotY = currentScrollProgress * Math.PI * 0.8;
       camera.rotation.y = cameraRotY;
       
-      // Camera tilt: slight up/down movement
-      camera.rotation.x = Math.sin(currentScrollProgress * Math.PI * 2) * 0.15;
+      camera.rotation.x = Math.sin(currentScrollProgress * Math.PI * 1.5) * 0.12;
+      camera.position.y = Math.sin(currentScrollProgress * Math.PI) * 0.8;
 
-      // Scale the quad dramatically based on scroll (1.0 to 2.5x)
-      const quadScale = THREE.MathUtils.lerp(1.0, 2.5, currentScrollProgress);
+      // Quad transforms
+      const quadScale = THREE.MathUtils.lerp(1.0, 2.2, currentScrollProgress);
       quad.scale.setScalar(quadScale);
-
-      // Rotate quad based on scroll
-      quad.rotation.z = currentScrollProgress * Math.PI * 0.5;
+      quad.rotation.z = currentScrollProgress * Math.PI * 0.4;
 
       // Update shader uniforms
       flowMaterial.uniforms.uTime.value = elapsed;
@@ -237,8 +220,7 @@ export default function HeroScene({ className = "" }) {
     };
     window.addEventListener("resize", handleResize);
 
-    // Mark as mounted for debugging
-    setIsMounted(true);
+    setIsReady(true);
 
     return () => {
       cancelAnimationFrame(frameId);
@@ -254,7 +236,7 @@ export default function HeroScene({ className = "" }) {
       if (mount.contains(renderer.domElement)) {
         mount.removeChild(renderer.domElement);
       }
-      setIsMounted(false);
+      setIsReady(false);
     };
   }, [prefersReduced]);
 
@@ -264,11 +246,11 @@ export default function HeroScene({ className = "" }) {
         ref={mountRef}
         className={`${className} bg-base relative overflow-hidden`}
         aria-hidden="true"
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%", height: "100%", minHeight: "100%" }}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-base via-surface to-base/80" />
-        <div className="absolute inset-0 opacity-30" style={{
-          backgroundImage: 'radial-gradient(ellipse at 50% 50%, rgba(0,217,192,0.15) 0%, transparent 70%), radial-gradient(ellipse at 80% 20%, rgba(124,111,255,0.1) 0%, transparent 60%)'
+        <div className="absolute inset-0 bg-gradient-to-br from-base via-surface to-base" />
+        <div className="absolute inset-0 opacity-40" style={{
+          backgroundImage: 'radial-gradient(ellipse at 30% 20%, rgba(0,217,192,0.25) 0%, transparent 60%), radial-gradient(ellipse at 70% 80%, rgba(124,111,255,0.2) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(0,217,192,0.1) 0%, transparent 70%)'
         }} />
       </div>
     );

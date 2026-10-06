@@ -341,23 +341,14 @@ export default function Home() {
           {/* ---------------- HERO ---------------- */}
           <section
             ref={heroRef}
-            className="relative min-h-screen flex items-center pt-24 overflow-hidden"
+            className="relative min-h-screen flex items-center pt-24"
             style={{ height: "200vh" }}
           >
-            {/* Three.js Hero Scene - fixed background covering full scroll area */}
-            <div 
-              className="absolute inset-0 -z-10 w-full h-full" 
-              style={{ 
-                position: "fixed", 
-                top: 0, 
-                left: 0, 
-                width: "100%", 
-                height: "200vh",
-                pointerEvents: "none"
-              }}
-            >
+            {/* Three.js Hero Scene - full viewport background */}
+            <div className="fixed inset-0 -z-10 w-full h-[200vh] pointer-events-none" style={{ top: 0, left: 0 }}>
               <HeroScene className="w-full h-full" />
-              <div className="absolute inset-0 bg-gradient-to-b from-base/30 via-transparent to-base/80 pointer-events-none" />
+              {/* Subtle gradient overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-b from-base/40 via-base/20 to-base/90 pointer-events-none" />
             </div>
 
             <div className="container-px relative w-full grid lg:grid-cols-12 gap-8 items-start pt-20 pb-32">
