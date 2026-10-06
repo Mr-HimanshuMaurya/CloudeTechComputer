@@ -1,13 +1,13 @@
 export const company = {
-  name: "Cloud Tech Computer",
+  name: "CloudTecHosting",
   short: "CloudTech",
   tagline: "Infrastructure that stays up while you build.",
   description:
     "We design, deploy and manage the systems behind growing businesses — servers, networks, hosting and the software that runs on top of them. One team, one point of contact, zero finger-pointing between vendors.",
   founded: "2024",
   location: "India",
-  email: "contact@cloudtechcomputer.in",
-  phone: "+91 98XXX XXXXX",
+  email: "contact.himanshu2k4@gmail.com",
+  phone: "+91 7011022899",
 };
 
 export const stats = [
@@ -21,56 +21,64 @@ export const services = [
   {
     code: "SVC/01",
     title: "Website Development",
-    summary: "Custom-built, fast-loading websites and web apps — not templated builders.",
+    summary:
+      "Custom-built, fast-loading websites and web apps — not templated builders.",
     detail:
       "From marketing sites to full-stack web applications, built and shipped by engineers who also run the servers they'll live on.",
   },
   {
     code: "SVC/02",
     title: "WordPress",
-    summary: "Custom themes, plugin development, migrations and performance hardening.",
+    summary:
+      "Custom themes, plugin development, migrations and performance hardening.",
     detail:
       "We build and maintain WordPress sites that stay fast and secure — custom theme development, plugin fixes, speed optimisation and malware cleanup.",
   },
   {
     code: "SVC/03",
     title: "Linux Server Administration",
-    summary: "Provisioning, hardening, patching and 24/7 monitoring of Linux systems.",
+    summary:
+      "Provisioning, hardening, patching and 24/7 monitoring of Linux systems.",
     detail:
       "End-to-end server lifecycle management — from initial hardening to ongoing patch cycles, backups and incident response.",
   },
   {
     code: "SVC/04",
     title: "VPS Hosting",
-    summary: "Isolated virtual servers, tuned for your stack, provisioned in hours not days.",
+    summary:
+      "Isolated virtual servers, tuned for your stack, provisioned in hours not days.",
     detail:
       "Right-sized virtual private servers with resource isolation, snapshotting and migration support — scaled up as you grow.",
   },
   {
     code: "SVC/05",
     title: "Dedicated Server",
-    summary: "Full physical machines for workloads that need raw, uncontested performance.",
+    summary:
+      "Full physical machines for workloads that need raw, uncontested performance.",
     detail:
       "Bare-metal servers configured, secured and monitored by our team, ideal for high-traffic apps and databases.",
   },
   {
     code: "SVC/06",
     title: "Cloud Hosting",
-    summary: "Elastic, redundant hosting architecture built to absorb traffic spikes.",
+    summary:
+      "Elastic, redundant hosting architecture built to absorb traffic spikes.",
     detail:
       "Cloud infrastructure design with load balancing, auto-scaling and redundancy so growth doesn't mean downtime.",
   },
   {
     code: "SVC/07",
     title: "Desktop Support",
-    summary: "On-call and on-site troubleshooting for your team's everyday hardware.",
+    summary:
+      "On-call and on-site troubleshooting for your team's everyday hardware.",
     detail:
       "Fast turnaround support for workstations, OS issues, software installs and general IT troubleshooting.",
   },
   {
     code: "SVC/08",
     title: "Networking",
-    summary: "LAN/WAN design, structured cabling and network performance tuning.",
+    summary:
+      "LAN/WAN design, structured cabling and network performance tuning.",
     detail:
       "Office and data-center networking — design, cabling, switching and Wi-Fi coverage built for reliability.",
   },
@@ -84,14 +92,16 @@ export const services = [
   {
     code: "SVC/10",
     title: "Firewall",
-    summary: "Perimeter security configured around how your business actually works.",
+    summary:
+      "Perimeter security configured around how your business actually works.",
     detail:
       "Firewall selection, configuration and ongoing rule management to keep threats out without blocking real work.",
   },
   {
     code: "SVC/11",
     title: "AMC",
-    summary: "Annual maintenance contracts — predictable cost, proactive upkeep.",
+    summary:
+      "Annual maintenance contracts — predictable cost, proactive upkeep.",
     detail:
       "Scheduled maintenance, priority support and proactive monitoring under a single yearly contract, no surprise bills.",
   },

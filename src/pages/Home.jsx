@@ -2,7 +2,19 @@ import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, ShieldCheck, Server, Headset, Monitor, HardDrive, Lock, Globe, Zap, Users, ChevronRight } from "lucide-react";
+import {
+  ArrowRight,
+  ShieldCheck,
+  Server,
+  Headset,
+  Monitor,
+  HardDrive,
+  Lock,
+  Globe,
+  Zap,
+  Users,
+  ChevronRight,
+} from "lucide-react";
 import HeroScene from "../three/HeroScene";
 import Reveal from "../components/Reveal";
 import { Eyebrow, FadeShell } from "../components/PageShell";
@@ -29,7 +41,7 @@ export default function Home() {
     if (!loaderDone) return;
 
     const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
 
     // Hero headline reveal
@@ -46,7 +58,7 @@ export default function Home() {
           stagger: 0.055,
           ease: "expo.out",
           delay: 0.2,
-        }
+        },
       );
     } else if (headlineWords) {
       gsap.set(headlineWords, { opacity: 1, y: 0, rotateX: 0 });
@@ -67,7 +79,7 @@ export default function Home() {
           start: "top top",
           toggleActions: "play none none none",
         },
-      }
+      },
     );
 
     // Hero CTAs reveal
@@ -86,7 +98,7 @@ export default function Home() {
           start: "top top",
           toggleActions: "play none none none",
         },
-      }
+      },
     );
 
     // Stats counter animation
@@ -128,7 +140,7 @@ export default function Home() {
           start: "top 85%",
           toggleActions: "play none none none",
         },
-      }
+      },
     );
 
     // Why Us section - staggered grid
@@ -147,7 +159,7 @@ export default function Home() {
           start: "top 80%",
           toggleActions: "play none none none",
         },
-      }
+      },
     );
 
     // Why Us header
@@ -165,22 +177,27 @@ export default function Home() {
           start: "top 85%",
           toggleActions: "play none none none",
         },
-      }
+      },
     );
 
     // Services preview - horizontal scroll jacking
     const servicesTrack = servicesTrackRef.current;
     const serviceCards = servicesRef.current?.querySelectorAll(".service-card");
-    if (servicesTrack && serviceCards && serviceCards.length > 0 && !prefersReduced) {
+    if (
+      servicesTrack &&
+      serviceCards &&
+      serviceCards.length > 0 &&
+      !prefersReduced
+    ) {
       const trackWidth = servicesTrack.scrollWidth;
       const viewportWidth = window.innerWidth;
-      
+
       // Create the horizontal scroll tween
       const horizontalTween = gsap.to(servicesTrack, {
         x: () => -(trackWidth - viewportWidth) * 0.8,
         ease: "none",
       });
-      
+
       // Create ScrollTrigger with the animation
       const horizontalST = ScrollTrigger.create({
         trigger: servicesRef.current,
@@ -210,7 +227,7 @@ export default function Home() {
               end: "left 30%",
               scrub: 0.5,
             },
-          }
+          },
         );
       });
     } else if (serviceCards) {
@@ -229,7 +246,7 @@ export default function Home() {
             start: "top 80%",
             toggleActions: "play none none none",
           },
-        }
+        },
       );
     }
 
@@ -248,7 +265,7 @@ export default function Home() {
           start: "top 85%",
           toggleActions: "play none none none",
         },
-      }
+      },
     );
 
     // Team preview - staggered with parallax
@@ -266,7 +283,7 @@ export default function Home() {
           start: "top 80%",
           toggleActions: "play none none none",
         },
-      }
+      },
     );
 
     // Team header
@@ -284,7 +301,7 @@ export default function Home() {
           start: "top 85%",
           toggleActions: "play none none none",
         },
-      }
+      },
     );
 
     // CTA section - expanding reveal
@@ -303,7 +320,7 @@ export default function Home() {
           start: "top 75%",
           toggleActions: "play none none none",
         },
-      }
+      },
     );
 
     // CTA background glow pulse
@@ -335,7 +352,7 @@ export default function Home() {
   return (
     <>
       <Loader onComplete={() => setLoaderDone(true)} />
-      
+
       {loaderDone && (
         <FadeShell className="relative z-10">
           {/* ---------------- HERO ---------------- */}
@@ -345,8 +362,11 @@ export default function Home() {
             style={{ height: "200vh" }}
           >
             {/* Three.js Hero Scene - full viewport background */}
-            <div className="fixed inset-0 -z-10 w-full h-[200vh] pointer-events-none" style={{ top: 0, left: 0 }}>
-              <HeroScene className="w-full h-full" />
+            <div
+              className="fixed inset-0 -z-10 w-full h-[200vh] pointer-events-none"
+              style={{ top: 0, left: 0 }}
+            >
+              {/* <HeroScene className="w-full h-full" /> */}
               {/* Subtle gradient overlay for text readability */}
               <div className="absolute inset-0 bg-gradient-to-b from-base/40 via-base/20 to-base/90 pointer-events-none" />
             </div>
@@ -390,10 +410,35 @@ export default function Home() {
 
                 {/* Scroll indicator */}
                 <div className="hero-cta mt-16 flex items-center gap-3 text-sm text-muted-2 opacity-60">
-                  <svg width="20" height="32" viewBox="0 0 20 32" fill="none" className="animate-bounce">
-                    <rect x="9" y="0" width="2" height="32" rx="1" fill="currentColor" opacity="0.3" />
-                    <path d="M10 28V4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                    <path d="M4 16L10 22L16 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <svg
+                    width="20"
+                    height="32"
+                    viewBox="0 0 20 32"
+                    fill="none"
+                    className="animate-bounce"
+                  >
+                    <rect
+                      x="9"
+                      y="0"
+                      width="2"
+                      height="32"
+                      rx="1"
+                      fill="currentColor"
+                      opacity="0.3"
+                    />
+                    <path
+                      d="M10 28V4"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M4 16L10 22L16 16"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                   <span className="mono-label">Scroll to explore</span>
                 </div>
@@ -432,10 +477,7 @@ export default function Home() {
           </section>
 
           {/* ---------------- WHY US ---------------- */}
-          <section
-            ref={whyUsRef}
-            className="py-24 md:py-32 relative"
-          >
+          <section ref={whyUsRef} className="py-24 md:py-32 relative">
             <div className="container-px grid lg:grid-cols-12 gap-12">
               <div className="lg:col-span-4 why-us-header">
                 <Reveal>
@@ -448,7 +490,9 @@ export default function Home() {
                 </Reveal>
                 <Reveal delay={0.2} className="mt-6">
                   <p className="text-muted leading-relaxed max-w-xs">
-                    We don't just manage servers. We own the outcome — from the rack to the application layer, with a single point of accountability.
+                    We don't just manage servers. We own the outcome — from the
+                    rack to the application layer, with a single point of
+                    accountability.
                   </p>
                 </Reveal>
               </div>
@@ -485,7 +529,11 @@ export default function Home() {
                     body: "Audit-ready configurations, encrypted data paths, and documented controls for regulated industries.",
                   },
                 ].map((f, i) => (
-                  <Reveal key={f.title} delay={i * 0.07} className="why-us-card">
+                  <Reveal
+                    key={f.title}
+                    delay={i * 0.07}
+                    className="why-us-card"
+                  >
                     <div className="card-border rounded-xl p-6 h-full transition-all duration-500 hover:border-signal/30 hover:shadow-[0_0_40px_rgba(0,217,192,0.08)] group">
                       <div className="relative mb-4">
                         <f.icon
@@ -498,7 +546,9 @@ export default function Home() {
                       <h3 className="font-display font-semibold text-text mb-2">
                         {f.title}
                       </h3>
-                      <p className="text-sm text-muted leading-relaxed">{f.body}</p>
+                      <p className="text-sm text-muted leading-relaxed">
+                        {f.body}
+                      </p>
                     </div>
                   </Reveal>
                 ))}
@@ -529,12 +579,16 @@ export default function Home() {
                 style={{ width: "max-content" }}
               >
                 {services.map((s, i) => (
-                  <Reveal key={s.code} delay={0} className="service-card flex-shrink-0 w-[320px] sm:w-[360px]">
+                  <Reveal
+                    key={s.code}
+                    delay={0}
+                    className="service-card flex-shrink-0 w-[320px] sm:w-[360px]"
+                  >
                     <ServiceCard {...s} />
                   </Reveal>
                 ))}
               </div>
-              
+
               {/* Gradient fade edges */}
               <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-surface/40 to-transparent pointer-events-none" />
               <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-surface/40 to-transparent pointer-events-none" />
@@ -542,10 +596,7 @@ export default function Home() {
           </section>
 
           {/* ---------------- TEAM PREVIEW ---------------- */}
-          <section
-            ref={teamRef}
-            className="py-24 md:py-32 relative"
-          >
+          <section ref={teamRef} className="py-24 md:py-32 relative">
             <div className="container-px">
               <div className="team-header flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
                 <div>
@@ -583,12 +634,16 @@ export default function Home() {
             ref={ctaRef}
             className="py-24 md:py-32 border-t border-line relative overflow-hidden"
           >
-            <div className="absolute inset-0 cta-glow" style={{
-              background: 'radial-gradient(ellipse at 50% 50%, rgba(0,217,192,0.08) 0%, transparent 60%)',
-              pointerEvents: 'none',
-              transformOrigin: 'center',
-            }} />
-            
+            <div
+              className="absolute inset-0 cta-glow"
+              style={{
+                background:
+                  "radial-gradient(ellipse at 50% 50%, rgba(0,217,192,0.08) 0%, transparent 60%)",
+                pointerEvents: "none",
+                transformOrigin: "center",
+              }}
+            />
+
             <div className="container-px relative">
               <Reveal className="cta-content card-border rounded-2xl p-10 md:p-16 lg:p-20 text-center relative overflow-hidden">
                 <div className="relative z-10">
@@ -596,7 +651,8 @@ export default function Home() {
                     Ready to stop managing servers yourself?
                   </h2>
                   <p className="text-muted mt-6 max-w-md mx-auto text-lg leading-relaxed">
-                    Tell us what you're running today — we'll tell you exactly what it needs.
+                    Tell us what you're running today — we'll tell you exactly
+                    what it needs.
                   </p>
                   <NavLink
                     to="/contact"
@@ -606,20 +662,71 @@ export default function Home() {
                     <ArrowRight size={18} />
                   </NavLink>
                 </div>
-                
+
                 {/* Decorative circuit lines */}
-                <div className="absolute inset-0 pointer-events-none opacity-30" aria-hidden="true">
-                  <svg className="w-full h-full" viewBox="0 0 800 400" preserveAspectRatio="none">
+                <div
+                  className="absolute inset-0 pointer-events-none opacity-30"
+                  aria-hidden="true"
+                >
+                  <svg
+                    className="w-full h-full"
+                    viewBox="0 0 800 400"
+                    preserveAspectRatio="none"
+                  >
                     <defs>
-                      <linearGradient id="circuitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#00D9C0" stopOpacity="0.4" />
-                        <stop offset="100%" stopColor="#7C6FFF" stopOpacity="0.2" />
+                      <linearGradient
+                        id="circuitGrad"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%"
+                      >
+                        <stop
+                          offset="0%"
+                          stopColor="#00D9C0"
+                          stopOpacity="0.4"
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor="#7C6FFF"
+                          stopOpacity="0.2"
+                        />
                       </linearGradient>
                     </defs>
-                    <path d="M50,200 Q200,100 400,200 Q600,300 750,200" stroke="url(#circuitGrad)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-                    <path d="M50,280 Q200,380 400,280 Q600,180 750,280" stroke="url(#circuitGrad)" strokeWidth="1" fill="none" strokeLinecap="round" opacity="0.5" />
-                    <circle cx="400" cy="200" r="60" fill="none" stroke="url(#circuitGrad)" strokeWidth="1" opacity="0.3" />
-                    <circle cx="400" cy="200" r="100" fill="none" stroke="url(#circuitGrad)" strokeWidth="0.5" opacity="0.2" strokeDasharray="8,4" />
+                    <path
+                      d="M50,200 Q200,100 400,200 Q600,300 750,200"
+                      stroke="url(#circuitGrad)"
+                      strokeWidth="1.5"
+                      fill="none"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M50,280 Q200,380 400,280 Q600,180 750,280"
+                      stroke="url(#circuitGrad)"
+                      strokeWidth="1"
+                      fill="none"
+                      strokeLinecap="round"
+                      opacity="0.5"
+                    />
+                    <circle
+                      cx="400"
+                      cy="200"
+                      r="60"
+                      fill="none"
+                      stroke="url(#circuitGrad)"
+                      strokeWidth="1"
+                      opacity="0.3"
+                    />
+                    <circle
+                      cx="400"
+                      cy="200"
+                      r="100"
+                      fill="none"
+                      stroke="url(#circuitGrad)"
+                      strokeWidth="0.5"
+                      opacity="0.2"
+                      strokeDasharray="8,4"
+                    />
                   </svg>
                 </div>
               </Reveal>

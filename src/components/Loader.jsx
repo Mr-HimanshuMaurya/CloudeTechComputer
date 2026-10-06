@@ -150,7 +150,7 @@ export default function Loader({ onComplete }) {
       ref={loaderRef}
       className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-base"
       role="status"
-      aria-label="Loading Cloud Tech Computer"
+      aria-label="Loading CloudTecHosting"
       aria-busy="true"
     >
       <div className="flex flex-col items-center gap-6">
