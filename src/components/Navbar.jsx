@@ -21,14 +21,23 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
-        scrolled ? "bg-base/85 backdrop-blur-md border-b border-line" : "bg-transparent"
+        scrolled
+          ? "bg-base/85 backdrop-blur-md border-b border-line"
+          : "bg-transparent"
       }`}
     >
       <nav className="container-px flex items-center justify-between h-18 py-4">
-        <NavLink to="/" className="flex items-center gap-2.5 group" onClick={() => setOpen(false)}>
-          <span className="relative flex items-center justify-center w-9 h-9 rounded-lg bg-surface border border-line">
-            <Cpu size={18} className="text-signal" strokeWidth={1.75} />
-          </span>
+        <NavLink
+          to="/"
+          className="flex items-center gap-2.5 group"
+          onClick={() => setOpen(false)}
+        >
+          <img
+            src="/shortlogo.png"
+            alt="CloudTech Hosting"
+            className="w-10 h-10 object-contain"
+          />
+
           <span className="font-display font-semibold text-[1.05rem] tracking-tight text-text">
             {company.name}
           </span>
@@ -42,9 +51,7 @@ export default function Navbar() {
               end={link.to === "/"}
               className={({ isActive }) =>
                 `px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActive
-                    ? "text-signal"
-                    : "text-muted hover:text-text"
+                  isActive ? "text-signal" : "text-muted hover:text-text"
                 }`
               }
             >
