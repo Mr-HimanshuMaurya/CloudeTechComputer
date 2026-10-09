@@ -33,7 +33,7 @@ export default function Navbar() {
           onClick={() => setOpen(false)}
         >
           <img
-            src="/shortlogo.png"
+            src="/shortlogowithoutbg.png"
             alt="CloudTech Hosting"
             className="w-10 h-10 object-contain"
           />

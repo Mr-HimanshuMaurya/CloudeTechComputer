@@ -155,9 +155,11 @@ export default function Loader({ onComplete }) {
     >
       <div className="flex flex-col items-center gap-6">
         <div className="logo-row flex items-center gap-2">
-          <span className="relative flex items-center justify-center w-12 h-12 rounded-lg bg-surface border border-line">
-            <Cpu size={22} className="text-signal" strokeWidth={1.75} />
-          </span>
+          <img
+            src="/shortlogowithoutbg.png"
+            alt="CloudTech Hosting"
+            className="w-10 h-10 object-contain"
+          />
           <span className="font-display font-semibold text-2xl md:text-4xl tracking-tight text-text">
             {LOGO_CHARS.map((c, i) => (
               <span
@@ -177,7 +179,9 @@ export default function Loader({ onComplete }) {
 
         <div className="relative w-full max-w-md mt-8">
           <div className="flex items-center justify-between gap-3 mb-2">
-            <span className="font-mono text-xs text-muted-2">Loading assets</span>
+            <span className="font-mono text-xs text-muted-2">
+              Loading assets
+            </span>
             <span
               ref={counterRef}
               className="loader-counter font-mono text-xl font-semibold text-signal tabular-nums"
@@ -189,7 +193,10 @@ export default function Loader({ onComplete }) {
             <div
               ref={lineRef}
               className="progress-fill h-full bg-signal rounded-full relative"
-              style={{ width: "0%", boxShadow: "0 0 12px #00D9C0, 0 0 24px #00D9C0" }}
+              style={{
+                width: "0%",
+                boxShadow: "0 0 12px #00D9C0, 0 0 24px #00D9C0",
+              }}
             />
           </div>
         </div>
